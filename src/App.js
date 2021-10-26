@@ -1,28 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import axios from 'axios';
-import Button from 'react-bootstrap/Button'
+import Table from 'react-bootstrap/Table'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
-  const [posts, setPosts] = useState([]);
+  // const [posts, setPosts] = useState([]);
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
     async function getPosts() {
-      const result = await axios('https://jsonplaceholder.typicode.com/posts');
-    setPosts(result.data);
+      // const result = await axios('https://jsonplaceholder.typicode.com/posts');
+      const result = await axios('http://localhost:8000/store/products');
+    // setPosts(result.data);
+    setProducts(result.data);
     }
 
     getPosts();
-  });
+  }, []);
 
   return (
-    <div>
-      <Button variant="primary">버튼</Button>
-      <ul>
-        {posts.map(post => <li key={post.id}>{post.title}</li>)}
-      </ul>
-    </div>
+    <Table striped bordered hover size="sm">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        {products.map(product => 
+          <tr key={product.id}>
+            <td>{product.id}</td>
+            <td>{product.title}</td>
+            <td>{product.unit_price}</td>
+          </tr>
+        )}
+      </tbody>
+    </Table>
   );
 }
 
